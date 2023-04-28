@@ -5,7 +5,7 @@ export default function App() {
     <div className="container">
       <div className="header">
         <div className="header-box">
-          <img src="" alt="" />
+          <img src="images/profile.png" className="img" alt="" />
         </div>
       </div>
     </div>
