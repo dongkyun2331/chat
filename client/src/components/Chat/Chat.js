@@ -6,6 +6,7 @@ import InfoBar from "../InfoBar/InfoBar";
 import Messages from "../Messages/Messages";
 import Input from "../Input/Input";
 import TextContainer from "../TextContainer/TextContainer";
+
 const ENDPOINT = "http://localhost:5000";
 let socket;
 
@@ -15,6 +16,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
     socket = io(ENDPOINT);
@@ -26,22 +28,31 @@ const Chat = ({ location }) => {
         alert(error);
       }
     });
-  }, [ENDPOINT, location.search]);
+
+    // cleanup function
+    return () => {
+      socket.disconnect();
+      socket.off();
+    };
+  }, [location.search]);
+
   useEffect(() => {
-    //로딩 될때만 실행
     socket.on("message", (message) => {
-      setMessage((message) => [...messages, message]);
+      setMessages((prevMessages) => [...prevMessages, message]);
     });
+
     socket.on("roomData", ({ users }) => {
       setUsers(users);
     });
   }, []);
+
   const sendMessage = (event) => {
     event.preventDefault();
     if (message) {
       socket.emit("sendMessage", message, () => setMessage(""));
     }
   };
+
   return (
     <div className="outerContainer">
       <div className="container">
