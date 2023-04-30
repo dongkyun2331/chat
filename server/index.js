@@ -19,4 +19,5 @@ io.on("connection", (socket) => {
     console.log("유저가 떠났어요.");
   });
 });
+
 server.listen(PORT, () => console.log(`서버가 ${PORT} 에서 시작되었어요`));
